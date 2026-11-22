@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="Pixelforge — піксель-арт студія в браузері: шари, анімація, експорт PNG і GIF." />
+    <meta name="theme-color" content="#1B1A2E" />
+    <title>Pixelforge</title>
+    <script>
+      // Ставимо тему ДО рендеру React, щоб не було «спалаху» світлої теми
+      try {
+        var s = JSON.parse(localStorage.getItem('pixelforge:settings') || '{}').state || {};
+        var t = s.theme || 'system';
+        var dark = t === 'dark' || (t === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.classList.toggle('dark', dark);
+        if (s.lang) document.documentElement.lang = s.lang;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

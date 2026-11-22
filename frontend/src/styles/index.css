@@ -1,0 +1,128 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Дизайн-токени. Значення — це R G B без rgb(), щоб Tailwind міг
+ * додавати прозорість: bg-accent/20 → rgb(var(--accent) / 0.2)
+ *
+ * Палітра «нічна майстерня»: глибокий індиго замість чорного,
+ * золото монетки як акцент і бірюза «слайма» як другий колір.
+ */
+:root {
+  --bg: 238 237 245;        /* #EEEDF5 */
+  --surface: 255 255 255;
+  --surface-2: 228 226 239; /* #E4E2EF */
+  --line: 205 201 222;      /* #CDC9DE */
+  --ink: 30 27 46;          /* #1E1B2E */
+  --muted: 100 95 125;      /* #645F7D */
+  --accent: 242 183 5;      /* #F2B705 — монетка */
+  --accent-ink: 30 27 46;
+  --teal: 20 150 138;       /* #14968A — слайм */
+  --danger: 200 55 62;
+  --shadow: 30 27 46;
+  --checker-a: 255 255 255;
+  --checker-b: 225 222 236;
+  color-scheme: light;
+}
+
+.dark {
+  --bg: 27 26 46;           /* #1B1A2E */
+  --surface: 37 35 61;      /* #25233D */
+  --surface-2: 47 45 76;    /* #2F2D4C */
+  --line: 66 63 101;        /* #423F65 */
+  --ink: 236 234 246;       /* #ECEAF6 */
+  --muted: 162 158 192;
+  --accent: 255 200 40;     /* #FFC828 */
+  --accent-ink: 27 26 46;
+  --teal: 46 196 182;       /* #2EC4B6 */
+  --danger: 240 98 104;
+  --shadow: 10 9 22;
+  --checker-a: 56 54 88;
+  --checker-b: 46 44 74;
+  color-scheme: dark;
+}
+
+@layer base {
+  html {
+    @apply bg-bg text-ink antialiased;
+    font-family: theme('fontFamily.sans');
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply min-h-dvh;
+  }
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent));
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: rgb(var(--accent) / 0.4);
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex select-none items-center justify-center gap-2 rounded-px border-2 px-4 py-2 text-sm font-medium transition-[transform,box-shadow,background-color] duration-100 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn border-[rgb(var(--shadow))] bg-accent text-accent-ink shadow-pixel hover:-translate-x-px hover:-translate-y-px active:translate-x-[2px] active:translate-y-[2px] active:shadow-none disabled:translate-x-0 disabled:translate-y-0;
+  }
+  .btn-secondary {
+    @apply btn border-line bg-surface text-ink hover:border-ink/40;
+  }
+  .btn-ghost {
+    @apply btn border-transparent bg-transparent text-ink hover:bg-surface-2;
+  }
+  .btn-danger {
+    @apply btn border-danger bg-danger text-white hover:brightness-110;
+  }
+  .icon-btn {
+    @apply inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-px text-ink/80 transition-colors hover:bg-surface-2 hover:text-ink disabled:pointer-events-none disabled:opacity-40;
+  }
+  .icon-btn[aria-pressed='true'] {
+    @apply bg-accent text-accent-ink hover:bg-accent;
+  }
+  .input {
+    @apply w-full rounded-px border-2 border-line bg-surface px-3 py-2 text-sm text-ink placeholder:text-muted/70 focus:border-accent focus:outline-none;
+  }
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-ink;
+  }
+  .panel {
+    @apply rounded-px border border-line bg-surface;
+  }
+  .panel-title {
+    @apply flex items-center justify-between px-3 pb-2 pt-3 text-sm font-semibold text-ink;
+  }
+  .checker {
+    background-color: rgb(var(--checker-a));
+    background-image:
+      linear-gradient(45deg, rgb(var(--checker-b)) 25%, transparent 25%),
+      linear-gradient(-45deg, rgb(var(--checker-b)) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, rgb(var(--checker-b)) 75%),
+      linear-gradient(-45deg, transparent 75%, rgb(var(--checker-b)) 75%);
+    background-size: 12px 12px;
+    background-position: 0 0, 0 6px, 6px -6px, -6px 0;
+  }
+  .pixelated {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--line)) transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,31 @@
+# Запуск усього проєкту однією командою:
+#   docker compose up --build
+# Сайт: http://localhost:8080   API-документація: http://localhost:8080/api/docs
+
+services:
+  backend:
+    build: ./backend
+    environment:
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-env-file}
+      JWT_EXPIRE_MINUTES: ${JWT_EXPIRE_MINUTES:-10080}
+      CORS_ORIGINS: http://localhost:8080
+    volumes:
+      - pixelforge-data:/data # тут живе pixelforge.db
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  pixelforge-data:
